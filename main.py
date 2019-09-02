@@ -8,8 +8,7 @@ from model import ActorCritic
 from helpers import save_model, worker, plot_losses, plot_scores
 
 # hyperparameters
-epochs = 1000
-annealing_epochs = 20000
+epochs = 30000
 lr = 0.0001
 gamma = 0.99
 clc = 0.1
@@ -57,8 +56,7 @@ params = {
     'brain_name': brain_name,
     'start_epsilon': start_epsilon,
     'end_epsilon': end_epsilon,
-    'epochs': annealing_epochs,
-    'epochs': epochs + annealing_epochs,
+    'epochs': epochs,
     'lr': lr,
     'gamma': gamma,
     'clc': clc,

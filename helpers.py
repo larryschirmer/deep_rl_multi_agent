@@ -132,14 +132,9 @@ def worker(model, params, train=True, early_stop_threshold=5., early_stop_target
             print("Epoch: {}, Epsilon: {:.3f}, Ave Scores: [{}], Max: {:.4f}".format(epoch + 1, epsilon, ave_scores, np.amax(params['scores'])))
         
             replay = []
-            if average_score.all() >= early_stop_target:
+            early_stop_compare_array = np.full((len(average_score),), early_stop_target, dtype=float)
+            if np.all(np.greater(average_score, early_stop_compare_array)):
                 early_stop_captures.append(average_score)
-            
-            # plot_losses(params['losses'], 'loss.png')
-            # plot_losses(params['actor_losses'], filename='actor_loss.png', plotName="Actor Losses")
-            # plot_losses(params['critic_losses'], filename='critic_loss.png', plotName="Critic Losses")
-            # plot_scores(params['scores'], params['ave_scores'], filename='scores.png')
-              
 
 
 def run_episode(model, replay, params, epoch, train):
