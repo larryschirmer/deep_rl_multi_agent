@@ -121,7 +121,7 @@ def worker(model, params, train=True, early_stop_threshold=5., early_stop_target
             highest_score = np.amax(final_score)
             save_model(model, 'actor_critic_checkpoint@highest.pt')
 
-        if train and len(replay) >= params['batch_size']:
+        if train and len(replay) >= params['batch_size'] and epoch % 100 == 0:
             loss, actor_loss, critic_loss = update_params(replay, optimizer, params)
 
             params['losses'].append(loss.item())
@@ -274,8 +274,8 @@ def get_trjectory_loss(values, logprobs, rewards, mean_entropy, params):
     actor_loss1 = actor_loss1.sum()
     critic_loss = critic_loss.sum()
 
-    loss0 = actor_loss0 + params['clc']*critic_loss + 0.01 * mean_entropy
-    loss1 = actor_loss1 + params['clc']*critic_loss + 0.01 * mean_entropy
+    loss0 = actor_loss0 + params['clc']*critic_loss + params['entropy_bonus'] * mean_entropy
+    loss1 = actor_loss1 + params['clc']*critic_loss + params['entropy_bonus'] * mean_entropy
 
     actor_losses = (actor_loss0, actor_loss1)
     losses = (loss0, loss1)

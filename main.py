@@ -15,6 +15,7 @@ clc = 0.1
 start_epsilon = 0.8
 end_epsilon = 0.1
 reward_leadup = 50
+entropy_bonus = 0.01
 batch_size = 1
 
 input_dim = 24
@@ -61,6 +62,7 @@ params = {
     'gamma': gamma,
     'clc': clc,
     'reward_leadup': reward_leadup,
+    'entropy_bonus': entropy_bonus,
     'batch_size': batch_size,
     'losses': losses,
     'scores': scores,
