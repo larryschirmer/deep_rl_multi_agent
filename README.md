@@ -35,9 +35,9 @@ After installing this project's dependencies, launching `main.py` will begin tra
 python main.py
 ```
 
-This file launches the unity environment with twenty arms and begin posting to the console training updates every 100 epochs.
+This file launches the unity environment and begins posting to the console training updates every 100 epochs.
 
-As an alternative, `Report.ipynb` run in a jupyter notebook is also a ducumented example of how to train this environment.
+As an alternative, `Report.ipynb` run in a jupyter notebook is also a documented example of how to train this environment.
 
 If you would like to run the solved model checkpoint that I have provided, launch a jupyter notebook environment:
 
@@ -51,11 +51,12 @@ and open `Tennis-Model-Eval.ipynb`
 ## Problem/Solution
 
 ![M-O](https://vignette.wikia.nocookie.net/pixar/images/3/32/M-o_wall%E2%80%A2e.png/revision/latest?cb=20110429103328)
+
 **M-O - Pixar Wiki - Fandom.com**
 
-Consider the problem where paths and equiptment need to be kept clean and there exists a robot specialized for the job. One robot can keep a workspace clean but easily gets distracted and overwhelmed when there is unexpected dirt tracks. How can two or more robots constructively work together to keep the space clean.
+Consider the problem where paths and equipment need to be kept clean and there exists a robot specialized for the job. One robot can keep a workspace clean but easily gets distracted and overwhelmed when there is unexpected dirt tracks. How can two or more robots constructively work together to keep the space clean.
 
-It is ambitious to make a perfect analogy with this problem and the Tennis environment, but it does present a small step towards making something like this a reality. Training multiple identical deep reinforcement learning agents in a shared state space with rewards for when they successfully work together is exactly what the Tennis environment sets out to do. The analogy is limited because the Tennis agents occupy seperate spaces in the shared state space so they can't share in the same work. It is possible to train the agents to work together to perform acts they could not do by themselves however.
+It is ambitious to make a perfect analogy with this problem and the Tennis environment, but it does present a small step towards making something like this a reality. Training multiple identical deep reinforcement learning agents in a shared state space with rewards for when they successfully work together is exactly what the Tennis environment sets out to do. The analogy is limited because the Tennis agents occupy separate spaces in the shared state space so they can't share in the same work. It is possible to train the agents to work together to perform acts they could not do by themselves however.
 
 
 ## Important Files
