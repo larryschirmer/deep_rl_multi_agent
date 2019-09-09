@@ -1,4 +1,3 @@
-# dropped epsilon limit, turned up learning rate
 from unityagents import UnityEnvironment
 from time import perf_counter
 import pandas as pd
