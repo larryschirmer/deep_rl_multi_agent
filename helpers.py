@@ -55,17 +55,11 @@ def plot_durations(durations, filename='', plotName='Duration', show=False):
 
 def plot_scores(scores, ave_scores, filename='', plotName='Score', show=False):
 
-    # staked_scores = np.stack(scores, axis=1)
-    ave_stacked_scores = np.mean(scores, axis=1)
-
-    # staked_ave_scores = np.stack(ave_scores, axis=1)
-    ave_staked_ave_scores = np.mean(ave_scores, axis=1)
-
     fig = plt.figure()
     fig.add_subplot(111)
-    plt.plot(np.arange(len(ave_stacked_scores)), ave_stacked_scores, color="#d9d9d9")
-    plt.plot(np.arange(len(ave_staked_ave_scores)), ave_staked_ave_scores, color="#333333")
-    plt.axhline(y=np.amax(ave_staked_ave_scores), color="#8a8a8a", linestyle='-')
+    plt.plot(np.arange(len(scores)), scores, color="#d9d9d9")
+    plt.plot(np.arange(len(ave_scores)), ave_scores, color="#333333")
+    plt.axhline(y=np.amax(ave_scores), color="#8a8a8a", linestyle='-')
     plt.ylabel(plotName)
     plt.xlabel('Episode #')
     if show:
@@ -98,12 +92,10 @@ def load_model(model, filename, evalMode=True):
     return model
 
 
-def worker(model, params, train=True, early_stop_threshold=5., early_stop_target=1.):     # reset the environment
+def worker(model, params, train=True, early_stop_threshold=5., early_stop_target=1.):
 
     optimizer = torch.optim.Adam(lr=params['lr'], params=model.parameters())
     replay = []
-
-    highest_score = 0
     early_stop_captures = []
 
     for epoch in range(params['epochs']):
@@ -113,15 +105,10 @@ def worker(model, params, train=True, early_stop_threshold=5., early_stop_target
             break
 
         final_score, epsilon = run_episode(model, replay, params, epoch, train)
+        final_score = np.max(final_score)
         params['scores'].append(final_score)
-        stacked_scores = np.stack(params['scores'], axis=1)
-        sliced_scores = [agent_scores[-100:] for agent_scores in stacked_scores]
-        average_score = np.mean(sliced_scores, axis=1)
+        average_score = np.mean(params['scores'][-100:])
         params['ave_scores'].append(average_score)
-        
-        if train and final_score.any() >= highest_score:
-            highest_score = np.amax(final_score)
-            save_model(model, 'actor_critic_checkpoint@highest.pt')
 
         if train and len(replay) >= params['batch_size']:
             loss, actor_loss, critic_loss = update_params(replay, optimizer, params)
@@ -130,13 +117,11 @@ def worker(model, params, train=True, early_stop_threshold=5., early_stop_target
             params['actor_losses'].append(actor_loss.item())
             params['critic_losses'].append(critic_loss.item())
 
-            ave_scores = ' '.join(["{:.3f}".format(s) for s in average_score])
             if  epoch % 100 == 0:
-                print("Epoch: {}, Epsilon: {:.3f}, Ave Scores: [{}], Max: {:.4f}".format(epoch + 1, epsilon, ave_scores, np.amax(params['scores'])))
+                print("Epoch: {}, Epsilon: {:.3f}, Ave Scores: {:.3f}, Max: {:.4f}".format(epoch + 1, epsilon, average_score, np.amax(params['scores'])))
         
             replay = []
-            early_stop_compare_array = np.full((len(average_score),), early_stop_target, dtype=float)
-            if np.all(np.greater(average_score, early_stop_compare_array)):
+            if average_score > early_stop_target:
                 early_stop_captures.append(average_score)
 
 
